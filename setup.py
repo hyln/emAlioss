@@ -1,10 +1,10 @@
 import platform
 from cx_Freeze import setup, Executable
 
-# if platform.system() == "Windows":
-#     base = "Win32GUI" 
-# elif platform.system() == "Linux":
-#     base = None
+if platform.system() == "Windows":
+    base = "Win32GUI" 
+elif platform.system() == "Linux":
+    base = None
 
 executables = [
     Executable(
@@ -12,7 +12,8 @@ executables = [
         target_name="emalioss.exe",
         copyright="Copyright (C) 2024 emnavi",
         # base="gui",
-        base="Win32GUI",
+        base=base,
+        # base="Win32GUI",
         icon="./assets/icon.ico",
         
         shortcut_name="Em Alioss",
