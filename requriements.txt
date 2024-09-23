@@ -1,0 +1,4 @@
+PySide6
+qt_material
+oss2
+cx_Freeze

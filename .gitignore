@@ -1,0 +1,8 @@
+config.ini
+__pycache__/
+*.pyc
+*.pyo
+tmp/
+test/
+build/
+dist/
