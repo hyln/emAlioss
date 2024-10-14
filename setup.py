@@ -1,10 +1,8 @@
 import platform
 from cx_Freeze import setup, Executable
 
-if platform.system() == "Windows":
-    base = "Win32GUI" 
-elif platform.system() == "Linux":
-    base = None
+base = None
+if platform.system() == 'Win32' : base = 'Win32GUI'
 
 executables = [
     Executable(

@@ -19,18 +19,20 @@ Alioss Img Tools 使用程序目录下的`config.ini`管理设置（或者C:\Use
 [ossconfig]
 alibaba_cloud_access_key_id = <ALIBABA_CLOUD_ACCESS_KEY_ID>
 alibaba_cloud_access_key_secret = <ALIBABA_CLOUD_ACCESS_KEY_SECRET>
-prefix = project_tar
 bucket = <YOUR_BUCKET_NAME>
 endpoint = https://oss-cn-beijing.aliyuncs.com
 region = cn-beijing
 [imageprefix]
-prefix = oss_tools_test
+prefix = <your_image_root_folder>
 [prjprefix]
 prefix = oss_prj_test
 ````
 配置完成后即可双击`emAlioss`打开
 
 > 对于内部使用，请从飞书直接复制`config.ini`配置
+
+对于`<your_image_root_folder>`是一个自定义参数，起一个自己喜欢的名字即可
+对于`prjprefix`，当前还未完成
 
 
 ### 图片上传
@@ -73,7 +75,6 @@ Alioss Tools 在同一个bucket中通过不同文件夹分类不同类型的文�
 
 ### 设置oss
 
-
 在ram访问控制中[添加用户](https://ram.console.aliyun.com/users)
 
 ## 手动构建程序
@@ -81,3 +82,8 @@ Alioss Tools 在同一个bucket中通过不同文件夹分类不同类型的文�
 ```bash
 python setup.py bdist_msi
 ```
+
+### bug
+
+1. 网络问题可能导致无法连接至oss:，可以尝试以下更换网络，看是否能解决
+

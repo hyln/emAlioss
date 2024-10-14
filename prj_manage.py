@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QWidget,QLabel,QHBoxLayout,QMenu,QInputDialog
+from PySide6.QtWidgets import QWidget,QLabel,QVBoxLayout,QMenu,QInputDialog,QFileDialog,QMessageBox,QApplication
 from PySide6.QtGui import QPixmap,QAction
-from PySide6.QtCore import Qt,QModelIndex
+from PySide6.QtCore import Qt,QModelIndex,QTimer
 from oss_manage import OssTreeView,OSSModel
 from oss_utils import OssUtils
 class PrjManage(QWidget):
@@ -8,12 +8,26 @@ class PrjManage(QWidget):
         '''创建开源项目包管理页面'''
         super().__init__()
         self.oss_utils = oss_utils
-        self.image_management_layout = QHBoxLayout(self)
+        self.image_management_layout = QVBoxLayout(self)
         self.custom_tree_widget = OssTreeView(oss_utils,self.oss_utils.prj_prefix)
         self.custom_tree_widget.selectionModel().selectionChanged.connect(self.on_selection_changed)
         self.custom_tree_widget.customContextMenuRequested.connect(self.show_context_menu)
 
         self.image_management_layout.addWidget(self.custom_tree_widget)
+
+
+        self.status_label = QLabel("", self)
+        self.status_label.setAlignment(Qt.AlignCenter)
+        self.status_label.setStyleSheet("background-color: black; color: white; font-size: 16px;")
+        self.status_label.setVisible(False)
+        self.image_management_layout.addWidget(self.status_label)
+    def hide_status_message(self):
+        self.status_label.setVisible(False)
+    def show_status_message(self, message, duration=2000):
+        self.status_label.setText(message)
+        self.status_label.setVisible(True)
+        QTimer.singleShot(duration, self.hide_status_message)
+
     def show_context_menu(self, position):
         '''显示菜单，根据点击位置显示不同的菜单'''
         index = self.custom_tree_widget.indexAt(position)
@@ -59,9 +73,12 @@ class PrjManage(QWidget):
 
         copy_url_action = QAction("Copy Oss Link", self)
         menu.addAction(copy_url_action)
+        copy_url_action.triggered.connect(lambda: self.copy_url())
 
         upload_file_action = QAction("Upload File", self)
         menu.addAction(upload_file_action)
+        upload_file_action.triggered.connect(lambda: self.upload_file())
+
 
 
         refresh_action = QAction("Refresh", self)
@@ -86,8 +103,41 @@ class PrjManage(QWidget):
         self.custom_tree_widget.selectionModel().selectionChanged.connect(self.on_selection_changed)
         self.custom_tree_widget.customContextMenuRequested.connect(self.show_context_menu)
         # self.custom_tree_widget.expandAll()
+    def copy_url(self):
+        index = self.custom_tree_widget.currentIndex()
+        if index.isValid():
+            item = index.internalPointer()
+            item_path = item.name
+            while(item.parent):
+                item = item.parent
+                item_path = item.name + "/" + item_path 
+            copy_url = f"{self.oss_utils.oss_global_base_url}/{item_path}"
+            print(f"Copy url: {copy_url}")
+            # copy to clipboard
+            QApplication.clipboard().setText(copy_url)
+            self.show_status_message("Copy url success")
 
+            # self.oss_utils.copy_to_clipboard(item.name)
 
+    def upload_file(self):
+        print("[prjManage]upload file")
+        index = self.custom_tree_widget.currentIndex()
+        if index.isValid():
+            item = index.internalPointer()
+            item_path = item.name
+            while(item.parent):
+                item = item.parent
+                item_path = item.name + "/" + item_path  
+            # 只要压缩文件格式 tar.gz,zip
+            file_path = QFileDialog.getOpenFileName(self, "Select File", "", "tar.gz Files (*.tar.gz);;zip Files (*.zip)")
+            if file_path[0]:
+                print(f"Selected file: {file_path[0]} , upload to {item_path}")
+                try:
+                    self.oss_utils.upload(item_path,file_path[0])
+                    self.refresh()
+                except ConnectionError as e:
+                    print(e)
+                    QMessageBox.warning(self, "提示", "Failed to connect to OSS")
     def rename_item(self):
         index = self.custom_tree_widget.currentIndex()
         if index.isValid():

@@ -94,6 +94,11 @@ class OssUtils():
         :param oss_folder_path: oss上的文件夹路径
         :param local_file_path: 本地文件的全局路径
         '''
+        # 如果oss_folder_path不以/结尾,则加上/
+        if(oss_folder_path[-1] != "/"):
+            oss_folder_path = oss_folder_path + "/"
+        else:
+            oss_folder_path = oss_folder_path
         if(file_name is None):
             osspath = oss_folder_path + local_file_path.split("/")[-1]
         else:

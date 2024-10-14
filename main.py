@@ -6,9 +6,30 @@ from PySide6.QtCore import Qt
 from qt_material import apply_stylesheet
 from main_window import MainWindow
 from waiting_page import WaitingWindow
-
+import logging
 # from qt_material import list_themes
 # print(list_themes())
+
+
+# 配置日志记录
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', filename='emalioss.log', filemode='a')
+
+class PrintLogger:
+    def __init__(self, logger, level):
+        self.logger = logger
+        self.level = level
+
+    def write(self, message):
+        if message.strip() != "":
+            self.logger.log(self.level, message.strip())
+
+    def flush(self):
+        pass
+
+# 重定向 print 输出到日志
+sys.stdout = PrintLogger(logging.getLogger(), logging.INFO)
+sys.stderr = PrintLogger(logging.getLogger(), logging.ERROR)
+
 
 class MainApp(QApplication):
     def __init__(self):
