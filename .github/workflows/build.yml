@@ -39,8 +39,8 @@ jobs:
           elif [[ ${{ matrix.os }} == windows-* ]]; then
             python setup.py bdist_msi
           else
-            # python setup.py bdist_appimage
-            python setup.py build
+            python setup.py bdist_appimage
+            # python setup.py build
           fi
           
 
