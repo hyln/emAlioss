@@ -129,15 +129,20 @@ class PrjManage(QWidget):
                 item = item.parent
                 item_path = item.name + "/" + item_path  
             # 只要压缩文件格式 tar.gz,zip
-            file_path = QFileDialog.getOpenFileName(self, "Select File", "", "tar.gz Files (*.tar.gz);;zip Files (*.zip)")
+            # file_path = QFileDialog.getOpenFileName(self, "Select File", "", "tar.gz Files (*.tar.gz);;zip Files (*.zip)")
+            file_path = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)")
             if file_path[0]:
                 print(f"Selected file: {file_path[0]} , upload to {item_path}")
                 try:
                     self.oss_utils.upload(item_path,file_path[0])
                     self.refresh()
+                    self.show_status_message("Upload success")
                 except ConnectionError as e:
                     print(e)
                     QMessageBox.warning(self, "提示", "Failed to connect to OSS")
+                except Exception as e:
+                    print(e)
+                    QMessageBox.warning(self, "提示", "Upload failed")
     def rename_item(self):
         index = self.custom_tree_widget.currentIndex()
         if index.isValid():
@@ -150,6 +155,9 @@ class PrjManage(QWidget):
         print("[prjManage]delete")
         index = self.custom_tree_widget.currentIndex()
         if index.isValid():
+            # 确认是否删除
+            reply = QMessageBox.question(self, "Delete Item", "Are you sure you want to delete this item?", QMessageBox.Yes | QMessageBox.No)
+            print(reply)
             self.custom_tree_widget.model.remove_item(index)
 
     def new_folder(self,index=None):
