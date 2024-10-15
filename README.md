@@ -86,6 +86,8 @@ python setup.py bdist_msi
 ### ubuntu 
 ```bash
 sudo apt-get install --reinstall libxcb-xinerama0 libxcb1 libx11-xcb1 libxcb-util1 libxcb-cursor0
+sudo apt-get install alien
+
 
 ```
 
