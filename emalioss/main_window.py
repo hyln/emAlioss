@@ -6,9 +6,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 
-from upload_page import UploadPage
-from image_manage import ImgManage
-from prj_manage import PrjManage
+from emalioss.upload_page import UploadPage
+from emalioss.image_manage import ImgManage
+from emalioss.prj_manage import PrjManage
 
 
 class MainWindow(QMainWindow):
@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         self.list_widget = QListWidget()
         self.list_widget.addItem("上传图片")
         self.list_widget.addItem("图片管理")
-        self.list_widget.addItem("文件包管理")
+        self.list_widget.addItem("文件管理")
 
         # self.list_widget.addItem("设置")
 

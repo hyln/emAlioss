@@ -21,12 +21,13 @@ class OssUtils():
         
         # Check if the .emalioss.ini file exists in the user's home directory
         home_dir = os.path.expanduser("~")
-        emalioss_config_path = os.path.join(home_dir, '.emalioss.ini')
+        emalioss_config_path = os.path.join(home_dir, 'emalioss.ini')
 
-        if os.path.exists(emalioss_config_path):
+
+        if os.path.exists('./emalioss.ini'):
+            config.read('./emalioss.ini')
+        elif os.path.exists(emalioss_config_path):
             config.read(emalioss_config_path)
-        elif os.path.exists('./config.ini'):
-            config.read('./config.ini')
         else:
             raise FileNotFoundError("Config file not found")
 
@@ -143,7 +144,7 @@ class OssUtils():
                 self.bucket.delete_object(obj.key)
         else:
             print("[delete] oss file path:"+oss_path)
-            result = self.bucket.delete_object(prefix+"/"+oss_local_path)
+            result = self.bucket.delete_object(oss_local_path)
         # print('\n'.join(result.deleted_keys))            
 
     def create_folder(self,folder_name:str):

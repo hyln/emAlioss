@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QMessageBox
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap,QKeyEvent
-from oss_utils import OssUtils
+from emalioss.oss_utils import OssUtils
 from time import time
 import time
 import os

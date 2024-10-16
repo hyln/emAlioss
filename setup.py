@@ -1,13 +1,28 @@
 import platform
 from cx_Freeze import setup, Executable
+import os
+from setuptools import setup as setup_linux
+from setuptools import find_packages
+
+# 从环境变量中读取版本号
+def get_version():
+    return os.getenv('PACKAGE_VERSION', "0.1.0")  # 默认版本号为 0.0.1
+# 从 requirements.txt 读取依赖
+def parse_requirements(filename):
+    with open(filename) as f:
+        return f.read().splitlines()
 
 base = None
-if platform.system() == 'Win32' : base = 'Win32GUI'
+app_name = 'emalioss'
+if platform.system() == 'Win32': 
+    base = 'Win32GUI'
+    app_name = 'emalioss.exe'
+
 
 executables = [
     Executable(
         "main.py",
-        target_name="emalioss.exe",
+        target_name=app_name,
         copyright="Copyright (C) 2024 emnavi",
         # base="gui",
         base=base,
@@ -46,15 +61,32 @@ bdist_msi_options = {
     "data": msi_data,
 }
 
-
-
-setup(
-    name="emalioss",
-    version="0.1",
-    description="轻量资源管理!",
-    executables=executables,
-    options={
-        "build_exe": build_exe_options,
-        # "bdist_msi": bdist_msi_options,
-    },
-)
+if platform.system() == 'Win32': 
+    print("win")
+    setup(
+        name="emalioss",
+        version=get_version(),
+        description="轻量资源管理!",
+        executables=executables,
+        options={
+            "build_exe": build_exe_options,
+            # "bdist_msi": bdist_msi_options,
+        },
+    )
+else:
+    print("linux")
+    setup_linux(
+        name="emalioss",
+        version=get_version(),
+        description="轻量资源管理!",
+        author='hyaline',
+        author_email='hhhyaline_hao@outlook.com',
+        install_requires=parse_requirements('requirements.txt'),
+        entry_points={
+        'console_scripts': [
+            'emalioss=emalioss.main:main',  # 命令名=模块:函数
+        ],
+        },
+        packages=['emalioss'],  # 包含模块
+        include_package_data=True,
+    )

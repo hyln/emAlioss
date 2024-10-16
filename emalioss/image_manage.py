@@ -1,8 +1,8 @@
-from PySide6.QtWidgets import QWidget,QLabel,QHBoxLayout,QMenu,QInputDialog,QApplication,QSizePolicy
+from PySide6.QtWidgets import QWidget,QLabel,QHBoxLayout,QMenu,QInputDialog,QApplication,QSizePolicy,QMessageBox
 from PySide6.QtGui import QPixmap,QAction
 from PySide6.QtCore import Qt,QModelIndex
-from oss_manage import OssTreeView,OSSModel
-from oss_utils import OssUtils
+from emalioss.oss_manage import OssTreeView,OSSModel
+from emalioss.oss_utils import OssUtils
 class ImgManage(QWidget):
     def __init__(self,oss_utils:OssUtils):
         '''创建图片管理页面'''
@@ -47,53 +47,52 @@ class ImgManage(QWidget):
                 self.image_label.show()
     def show_item_context_menu(self, position, index):
         '''显示选中某项时的菜单'''
-        menu = QMenu()
+        self.menu = QMenu()
         
         selct_path =self.model.get_object_full_path(index)
         if(self.oss_utils.is_directory(selct_path) is False):
             copy_url_action = QAction("Copy Oss Link", self)
             copy_url_action.triggered.connect(self.copy_oss_url)
-            menu.addAction(copy_url_action)
+            self.menu.addAction(copy_url_action)
 
         rename_action = QAction("Rename", self)
         rename_action.triggered.connect(self.rename_item)
-        menu.addAction(rename_action)
+        self.menu.addAction(rename_action)
         
         delete_action = QAction("Delete", self)
         delete_action.triggered.connect(self.delete_item)
-        menu.addAction(delete_action)
+        self.menu.addAction(delete_action)
         
         if index.isValid():
             item = index.internalPointer()
         if(self.oss_utils.is_directory(item.name)):  
             new_folder_action = QAction(f"New Folder(/{item.name})", self)
             new_folder_action.triggered.connect(lambda: self.new_folder(index))
-            menu.addAction(new_folder_action)
-
-
+            self.menu.addAction(new_folder_action)
 
         refresh_action = QAction("Refresh", self)
         refresh_action.triggered.connect(lambda: self.refresh())
-        menu.addAction(refresh_action)  
-        menu.exec_(self.custom_tree_widget.viewport().mapToGlobal(position))
+        self.menu.addAction(refresh_action)  
+
+        self.menu.exec_(self.custom_tree_widget.viewport().mapToGlobal(position))
     def show_blank_context_menu(self, position):
         '''显示选中空白处时的菜单'''
-        menu = QMenu()
+        self.menu = QMenu()
         
         new_folder_action = QAction("New Folder", self)
         new_folder_action.triggered.connect(lambda: self.new_folder())
-        menu.addAction(new_folder_action)
+        self.menu.addAction(new_folder_action)
         refresh_action = QAction("Refresh", self)
         refresh_action.triggered.connect(lambda: self.refresh())
-        menu.addAction(refresh_action)
-        menu.exec_(self.custom_tree_widget.viewport().mapToGlobal(position))
+        self.menu.addAction(refresh_action)
+        self.menu.exec_(self.custom_tree_widget.viewport().mapToGlobal(position))
     def refresh(self):
         print("refresh")
         self.model = OSSModel(self.oss_utils,self.oss_utils.image_prefix)
         self.custom_tree_widget.setModel(self.model)
         self.custom_tree_widget.selectionModel().selectionChanged.connect(self.on_selection_changed)
         self.custom_tree_widget.customContextMenuRequested.connect(self.show_context_menu)
-        # self.custom_tree_widget.expandAll()
+        self.custom_tree_widget.expandAll()
 
     def rename_item(self):
         index = self.custom_tree_widget.currentIndex()
@@ -105,10 +104,14 @@ class ImgManage(QWidget):
                 self.custom_tree_widget.model.rename_item(index, new_text)
 
     def delete_item(self):
-        print("delete")
+        print("[imgDelete]")
         index = self.custom_tree_widget.currentIndex()
         if index.isValid():
-            self.custom_tree_widget.model.remove_item(index)
+            if(self.show_delete_confirmation(self.model.get_object_full_path(index))):
+                self.custom_tree_widget.model.remove_item(index)
+                self.refresh()
+                self.menu.close()
+
 
     def new_folder(self,index=None):
         if index is not None:
@@ -131,4 +134,21 @@ class ImgManage(QWidget):
             item_path = self.model.get_object_full_path(index)
             print(f"Copy {self.oss_utils.oss_global_base_url}/{item_path} to clipboard")
             QApplication.clipboard().setText(f"{self.oss_utils.oss_global_base_url}/{item_path}")
+    def show_delete_confirmation(self,file_path):
+        # 创建确认删除的消息框
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle("Confirm Deletion")
+        msg_box.setText(f"确认删除{file_path}?")
+        msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg_box.setDefaultButton(QMessageBox.No)
+
+        # 显示消息框并获取用户选择的按钮
+        result = msg_box.exec()
+
+        # 根据用户选择执行操作
+        if result == QMessageBox.Yes:
+            return True
+        else:
+            return False
         

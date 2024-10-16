@@ -1,7 +1,7 @@
 from PySide6.QtCore import QAbstractItemModel, QModelIndex, Qt
 from PySide6.QtWidgets import QWidget, QTreeView, QLabel, QMenu, QInputDialog,QMessageBox,QAbstractItemView,QHBoxLayout
 from PySide6.QtGui import QAction,QPixmap
-from oss_utils import OssUtils
+from emalioss.oss_utils import OssUtils
 
 class TreeNode:
     def __init__(self, name, parent=None):
@@ -136,10 +136,11 @@ class OSSModel(QAbstractItemModel):
             item_path = loop_parent_node.name + "/" + item_path  
         print("[ossManage]remove item_path: " + item_path)
 
-        self.beginRemoveRows(index.parent(), node.row(), node.row())
-        parent_node.remove_child(node)
         self.oss_utils.delete(item_path,self.oss_prefix)
-        self.endRemoveRows()
+
+        # self.beginRemoveRows(index.parent(), node.row(), node.row())
+        # parent_node.remove_child(node)
+        # self.endRemoveRows()
 
     def rename_item(self, index, new_name):
         if index.isValid():
@@ -151,7 +152,8 @@ class OSSModel(QAbstractItemModel):
 
             self.dataChanged.emit(index, index, [Qt.DisplayRole])
     def get_object_full_path(self,index):
-        node = index.internalPointer()
+        if index.isValid():
+            node = index.internalPointer()
         parent_node = node.parent
         # get full path
         item_path = parent_node.name +"/"+node.name

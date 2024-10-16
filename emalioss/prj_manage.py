@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import QWidget,QLabel,QVBoxLayout,QMenu,QInputDialog,QFileDialog,QMessageBox,QApplication
 from PySide6.QtGui import QPixmap,QAction
 from PySide6.QtCore import Qt,QModelIndex,QTimer
-from oss_manage import OssTreeView,OSSModel
-from oss_utils import OssUtils
+from emalioss.oss_manage import OssTreeView,OSSModel
+from emalioss.oss_utils import OssUtils
 class PrjManage(QWidget):
     def __init__(self,oss_utils:OssUtils):
         '''创建开源项目包管理页面'''
@@ -155,10 +155,9 @@ class PrjManage(QWidget):
         print("[prjManage]delete")
         index = self.custom_tree_widget.currentIndex()
         if index.isValid():
-            # 确认是否删除
-            reply = QMessageBox.question(self, "Delete Item", "Are you sure you want to delete this item?", QMessageBox.Yes | QMessageBox.No)
-            print(reply)
-            self.custom_tree_widget.model.remove_item(index)
+            if(self.show_delete_confirmation(self.model.get_object_full_path(index))):
+                self.custom_tree_widget.model.remove_item(index)
+                self.refresh()
 
     def new_folder(self,index=None):
         print("[prjManage]create new folder")
@@ -175,3 +174,20 @@ class PrjManage(QWidget):
             else:
                 self.custom_tree_widget.model.add_item(index, new_folder_name)
             # self.refresh()
+    def show_delete_confirmation(self,file_path):
+        # 创建确认删除的消息框
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Warning)
+        msg_box.setWindowTitle("Confirm Deletion")
+        msg_box.setText(f"确认删除{file_path}?")
+        msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg_box.setDefaultButton(QMessageBox.No)
+
+        # 显示消息框并获取用户选择的按钮
+        result = msg_box.exec()
+
+        # 根据用户选择执行操作
+        if result == QMessageBox.Yes:
+            return True
+        else:
+            return False

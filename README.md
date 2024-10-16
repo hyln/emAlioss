@@ -94,4 +94,4 @@ sudo apt-get install alien
 ### bug
 
 1. 网络问题可能导致无法连接至oss:，可以尝试以下更换网络，看是否能解决
-
+2. 文件操作后不更新，`refresh`一下试试
