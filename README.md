@@ -6,11 +6,39 @@ emAlioss 是基于Pyside6的小工具，用于管理小规模的图片以及文�
 支持平台
 
 - win
+- - ubuntu
 
 ## 快速开始
-### 安装
+### win安装
 
+推荐直接[下载安装包](https://github.com/hyaline-wang/emAlioss/releases)
 > 默认安装位置为 C:\Users\XXX\AppData\Local\Programs\alioss_tool
+
+手动构建可使用
+```bash
+git clone https://github.com/hyaline-wang/emAlioss.git
+cd emAlioss
+pip install -r requirements.txt
+python setpy.py bdist_msi
+```
+
+### ubuntu 安装
+
+安装依赖
+```bash
+sudo apt-get install --reinstall libxcb-xinerama0 libxcb1 libx11-xcb1 libxcb-util1 libxcb-cursor0
+sudo apt-get install alien
+```
+安装
+```bash
+git clone https://github.com/hyaline-wang/emAlioss.git
+cd emAlioss
+pip install .
+```
+使用
+```bash
+emalioss
+```
 
 ### 配置
 
