@@ -14,14 +14,14 @@ def parse_requirements(filename):
 
 base = None
 app_name = 'emalioss'
-if platform.system() == 'Win32': 
+if platform.system() == 'Windows': 
     base = 'Win32GUI'
     app_name = 'emalioss.exe'
 
 
 executables = [
     Executable(
-        "main.py",
+        "emalioss/main.py",
         target_name=app_name,
         copyright="Copyright (C) 2024 emnavi",
         # base="gui",
@@ -37,7 +37,7 @@ executables = [
 build_exe_options = {
     "excludes": ["tkinter"], 
     "include_msvcr": True,
-    "include_files": ["./assets/icon.ico","./assets/icon.svg"], 
+    "include_files": ["./emalioss/assets/icon.ico","./emalioss/assets/icon.svg"], 
 }
 
 
@@ -51,7 +51,7 @@ msi_data = {
         ("Prog.Id", None, None, "This is a description", "IconId", None),
     ],
     "Icon": [
-        ("IconId", "./assets/icon.svg"),
+        ("IconId", "./emalioss/assets/icon.svg"),
     ],
 }
 
@@ -61,7 +61,8 @@ bdist_msi_options = {
     "data": msi_data,
 }
 
-if platform.system() == 'Win32': 
+print("platform.system():",platform.system())   
+if platform.system() == 'Windows': 
     print("win")
     setup(
         name="emalioss",
