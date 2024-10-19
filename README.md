@@ -68,8 +68,7 @@ prefix = oss_prj_test
 ### 图片上传
 
 进入程序后使用首先选择目标**存储文件夹**，若没有请在`图片管理`中新建
-![](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/hao_image/ali_oss_manage/image_20240923223144.png)
-
+![upload_image](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/emalioss_assets/pyside_version/upload_image.png)
 - 有三种图片上传方式
     - 托拽，
     - 从粘贴板粘贴
