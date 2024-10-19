@@ -1,12 +1,12 @@
-# emAlioss
+![image](https://github.com/user-attachments/assets/555cc7d3-43c8-4fca-b636-c765146eee94)# emAlioss
 
 
 emAlioss 是基于Pyside6的小工具，用于管理小规模的图片以及文件。
 
+![home_page](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/emalioss_assets/pyside_version/home_page.png)
 支持平台
-
 - win
-- - ubuntu
+- ubuntu
 
 ## 快速开始
 ### win安装
@@ -42,7 +42,10 @@ emalioss
 
 ### 配置
 
-Alioss Img Tools 使用程序目录下的`config.ini`管理设置（或者C:\Users\XXX\.emalioss.ini），格式如下，若没有可在程序目录下新建
+Alioss Img Tools 从`HOME`目录寻找配置文件`emalioss.ini`即
+- win: C:\Users\xxxx\emalioss.ini
+- ubuntu: /home/xxxx/emalioss.ini
+若没有`emalioss.ini`可新建,配置文件标准格式为
 ```
 [ossconfig]
 alibaba_cloud_access_key_id = <ALIBABA_CLOUD_ACCESS_KEY_ID>
@@ -55,13 +58,15 @@ prefix = <your_image_root_folder>
 [prjprefix]
 prefix = oss_prj_test
 ````
-配置完成后即可双击`emAlioss`打开
+配置完成后再次打开软件时生效
 
-> 对于内部使用，请从飞书直接复制`config.ini`配置
-
-对于`<your_image_root_folder>`是一个自定义参数，起一个自己喜欢的名字即可
+对于`<your_image_root_folder>`是一个自定义参数，是一个云端文件夹，起一个自己喜欢的名字即可
 对于`prjprefix`，当前还未完成
 
+> 对于内部使用，请从飞书直接复制`config.ini`配置
+> 对于文档构建
+> imageprefix->prefix 填写 `emnavi_assets`
+> prjprefix->prefix  填写 `emnavi_video`
 
 ### 图片上传
 
@@ -74,6 +79,15 @@ prefix = oss_prj_test
     - 点击上传文件
 - 上传后点击 `复制当前图片链接` 即可复制缩略图显示的图片链接
 - 托拽支持多张图同时上传
+
+### 图片管理
+> 当前程序bug较多，有事没事 refresh 一下
+![](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/emalioss_assets/pyside_version/pic_manage.png)
+
+### 文件管理
+> 当前程序bug较多，有事没事 refresh 一下
+
+![](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/emalioss_assets/pyside_version/big_image_manage.png)
 
 
 ## 在阿里云创建 bucket
