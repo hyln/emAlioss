@@ -1,8 +1,5 @@
-![image](https://github.com/user-attachments/assets/555cc7d3-43c8-4fca-b636-c765146eee94)# emAlioss
-
-
+# emAlioss
 emAlioss 是基于Pyside6的小工具，用于管理小规模的图片以及文件。
-
 ![home_page](https://emnavi-doc-img.oss-cn-beijing.aliyuncs.com/emalioss_assets/pyside_version/home_page.png)
 支持平台
 - win
