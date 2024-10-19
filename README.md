@@ -115,20 +115,6 @@ Alioss Tools 在同一个bucket中通过不同文件夹分类不同类型的文�
 
 在ram访问控制中[添加用户](https://ram.console.aliyun.com/users)
 
-## 手动构建程序
-
-```bash
-python setup.py bdist_msi
-```
-
-### ubuntu 
-```bash
-sudo apt-get install --reinstall libxcb-xinerama0 libxcb1 libx11-xcb1 libxcb-util1 libxcb-cursor0
-sudo apt-get install alien
-
-
-```
-
 ### bug
 
 1. 网络问题可能导致无法连接至oss:，可以尝试以下更换网络，看是否能解决
