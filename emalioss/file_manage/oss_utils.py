@@ -142,9 +142,12 @@ class OssUtils():
             print("[delete] oss folder path:"+oss_path)
             for obj in oss2.ObjectIterator(self.bucket, prefix=oss_path):
                 self.bucket.delete_object(obj.key)
+            # TODO: 判断文件是否删除成功
+            return True
         else:
             print("[delete] oss file path:"+oss_path)
             result = self.bucket.delete_object(oss_local_path)
+            return True
         # print('\n'.join(result.deleted_keys))            
 
     def create_folder(self,folder_name:str):
@@ -209,7 +212,7 @@ class OssUtils():
                     new_path = new_path + self.get_path_suffix(old_path)
                 self.bucket.copy_object(self.bucket.bucket_name, old_path, new_path)
                 self.bucket.delete_object(old_path)
-            return new_path
+            return new_path.split("/")[-1]
         except oss2.exceptions.RequestError as e:
             print(f"Failed to connect to OSS: {e}")
             raise ConnectionError("Failed to connect to OSS") from e

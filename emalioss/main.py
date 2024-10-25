@@ -5,14 +5,13 @@ from PySide6.QtCore import QTimer
 from PySide6.QtCore import Qt
 from qt_material import apply_stylesheet
 import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from emalioss.main_window import MainWindow
 from emalioss.waiting_page import WaitingWindow
 import logging
 # from qt_material import list_themes
 # print(list_themes())
-
-
-
 
 # 配置日志记录
 import logging
@@ -61,8 +60,8 @@ class PrintLogger:
         pass
 
 # 重定向 print 输出到日志
-sys.stdout = PrintLogger(logging.getLogger(), logging.INFO)
-sys.stderr = PrintLogger(logging.getLogger(), logging.ERROR)
+# sys.stdout = PrintLogger(logging.getLogger(), logging.INFO)
+# sys.stderr = PrintLogger(logging.getLogger(), logging.ERROR)
 
 
 class MainApp(QApplication):
@@ -95,7 +94,7 @@ class MainApp(QApplication):
         QTimer.singleShot(500, lambda: waiting_window.close())
         
     def init_oss_connect(self):
-        from emalioss.oss_utils import OssUtils
+        from emalioss.file_manage.oss_utils import OssUtils
         try:
             self.oss_utils = OssUtils()
             self.waiting_window.update_status("成功连接至OSS")
