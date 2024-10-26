@@ -1,26 +1,53 @@
-from PySide6.QtWidgets import QWidget,QLabel,QHBoxLayout,QVBoxLayout,QMenu,QInputDialog,QMessageBox,QLineEdit
+from PySide6.QtWidgets import QWidget,QLabel,QHBoxLayout,QVBoxLayout,QMenu,QFileDialog,QMessageBox,QLineEdit
 from PySide6.QtGui import QPixmap,QAction
-from PySide6.QtCore import Qt,QModelIndex,QTimer
+from PySide6.QtCore import Qt,QModelIndex,QTimer,Signal
 from emalioss.file_manage.oss_utils import OssUtils
 from emalioss.file_manage.file_manage import FilterProxyModel,VirtualFileTreeModel,TreeNode,FileTreeView
 
 
 class ObjTreeView(FileTreeView):
+    upload_file_signal = Signal(str, str,int)  
     def __init__(self,model):
         super().__init__(model)
         # self.setHeaderHidden(True)
     def additionalMenu(self, index,menu:QMenu):
         if index.isValid():
-            pass
-            # menu.addSeparator()
-            # upload_action = QAction("Upload Img", self)
-            # upload_action.triggered.connect(lambda: QMessageBox.information(self, "Upload Img", "TODO"))
-            # menu.addAction(upload_action)
+            menu.addSeparator()
+            upload_action = QAction("Upload File", self)
+            upload_action.triggered.connect(lambda: self.upload_file(index))
+            menu.addAction(upload_action)
         else:
             pass
         return menu
-    def upload_img(self):
-        pass
+    def upload_file(self,index):
+        print("[ObjTreeView]upload file")
+        if index.isValid():
+            item = index.internalPointer()
+            model = self.model().sourceModel()
+            item_path = model.get_object_full_path(index)
+
+            # 只要压缩文件格式 tar.gz,zip
+            # file_path = QFileDialog.getOpenFileName(self, "Select File", "", "tar.gz Files (*.tar.gz);;zip Files (*.zip)")
+            file_path = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)")
+            if file_path[0]:
+                print(f"Selected file: {file_path[0]} , upload to {item_path}")
+                
+                print(f"Copy {model.oss_help.oss_global_base_url}/{item_path} to clipboard")
+                self.upload_file_signal.emit("Uploading","info",-1)
+                QTimer.singleShot(100, 
+                                  lambda: self.upload(model,item_path,file_path[0]))
+               
+    def upload(self,model,oss_file_path:str,local_file_path:str):
+        try:
+            model.oss_help.upload(oss_file_path,local_file_path)
+            # self.refresh()
+            self.upload_file_signal.emit("Upload success","success",2000)
+        except ConnectionError as e:
+            print(e)
+            self.upload_file_signal.emit("Failed to connect to OSS","error",2000)
+        except Exception as e:
+            print(e)
+            self.upload_file_signal.emit("Upload failed","error",2000)
 class ObjWidget(QWidget):
     def __init__(self,oss_utils:OssUtils):
         '''创建文件管理页面'''
@@ -48,6 +75,7 @@ class ObjWidget(QWidget):
         self.tree_view = ObjTreeView(self.proxy_model)
         # self.tree_view.selectionModel().selectionChanged.connect(self.on_selection_changed)
         self.tree_view.copy_url_signal.connect(self.show_status_message)
+        self.tree_view.upload_file_signal.connect(self.show_status_message)
 
         H1_layout.addWidget(self.tree_view)
         self.V_layout.addLayout(H1_layout)
@@ -61,11 +89,19 @@ class ObjWidget(QWidget):
 
     def hide_status_message(self):
         self.status_label.setVisible(False)
-    def show_status_message(self, message, duration=2000):
+    def show_status_message(self, message,msg_type='success', duration=2000):
         self.status_label.setText(message)
-        self.status_label.setStyleSheet("background-color: #5daa8c; color: white; font-size: 16px;")
+        if(msg_type == "info"):
+            self.status_label.setStyleSheet("background-color: #909083; color: white; font-size: 16px;")
+        elif(msg_type == "warning"):
+            self.status_label.setStyleSheet("background-color: #d4a883; color: white; font-size: 16px;")
+        elif(msg_type == "success"):
+            self.status_label.setStyleSheet("background-color: #5daa8c; color: white; font-size: 16px;")
+        elif(msg_type == "error"):
+            self.status_label.setStyleSheet("background-color: #c85662; color: white; font-size: 16px;")
         self.status_label.setVisible(True)
-        QTimer.singleShot(duration, self.hide_status_message)
+        if(duration > 0):
+            QTimer.singleShot(duration, self.hide_status_message)
     # def on_selection_changed(self, selected, deselected):
     #     '''左键点击图片时显示缩略图'''
     #     for index in selected.indexes():

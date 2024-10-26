@@ -61,6 +61,18 @@ class UploadPage(QWidget):
         self.progress_bar.setValue(0)  # 初始值
         self.progress_bar.setTextVisible(True)  # 显示文本
 
+        # self.image_container = QWidget()
+        # self.image_layout = QHBoxLayout(self.image_container)
+
+        # self.image_labels = []
+        # for _ in range(4):
+        #     label = QLabel()
+        #     label.setAlignment(Qt.AlignCenter)
+        #     self.image_labels.append(label)
+        #     self.image_layout.addWidget(label)
+
+        # layout.addWidget(self.image_container)
+
         self.upload_status_label = QLabel("等待图片上传")
 
         self.progress_layout.addWidget(self.progress_bar)

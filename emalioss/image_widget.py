@@ -64,8 +64,6 @@ class Imgwidget(QWidget):
         self.status_label.setVisible(False)
         H2_layout.addWidget(self.status_label)
         self.V_layout.addLayout(H2_layout)
-        # self.show_status_message("Copy url success")
-        # self.setLayout(self.V_layout)
 
     def hide_status_message(self):
         self.status_label.setVisible(False)
