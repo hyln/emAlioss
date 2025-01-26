@@ -22,6 +22,8 @@ python setup.py bdist_msi
 
 ### ubuntu 安装
 
+> 在非虚拟环境安装
+
 安装依赖
 ```bash
 sudo apt-get install --reinstall libxcb-xinerama0 libxcb1 libx11-xcb1 libxcb-util1 libxcb-cursor0

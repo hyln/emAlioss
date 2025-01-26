@@ -59,7 +59,10 @@ class VirtualFileTreeModel(QAbstractItemModel):
         self.get_model_data(self.oss_help.get_all_files(self.root_name), root_node)
 
         self._root_node = root_node
-    def get_model_data(self,data:list[str], parent:TreeNode):
+    # def get_model_data(self,data:list[str], parent:TreeNode):
+    # 要使用list[str]作为类型提示，请确保您是从typing模块导入List ，因为list是一种内置类型，并且不支持Python较旧版本（3.9之前）中的订阅。
+    def get_model_data(self,data, parent):
+
         '''
         @description: 递归获取所有文件夹和文件
         @param {list[str]} data: 读取到的文件夹和文件列表
