@@ -15,8 +15,9 @@ emAlioss 是基于Pyside6的小工具，用于管理小规模的图片以及文�
 ```bash
 git clone https://github.com/hyaline-wang/emAlioss.git
 cd emAlioss
+pip install cx_Freeze
 pip install -r requirements.txt
-python setpy.py bdist_msi
+python setup.py bdist_msi
 ```
 
 ### ubuntu 安装
