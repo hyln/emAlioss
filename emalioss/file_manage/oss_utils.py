@@ -31,7 +31,7 @@ class OssUtils():
         else:
             import platform 
             if platform.system() == 'Windows':
-                raise FileNotFoundError("Config file not found, please check C:\Users\xxxx\emalioss.ini is exist")
+                raise FileNotFoundError("Config file not found, please check C:\\Users\\xxxx\\emalioss.ini is exist")
             else:
                 raise FileNotFoundError("Config file not found, please check /home/xxxx/emalioss.ini is exist")
 
