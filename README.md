@@ -5,6 +5,8 @@ emAlioss 是基于Pyside6的小工具，用于管理小规模的图片以及文�
 - win
 - ubuntu
 
+> 注意: 当前配置文件是独立的，请查看[config配置](#config配置)
+
 ## 快速开始
 ### win安装
 
@@ -22,7 +24,7 @@ python setup.py bdist_msi
 
 ### ubuntu 安装
 
-> 在非虚拟环境安装
+> 1. 在conda base环境中测试了
 
 安装依赖
 ```bash
@@ -40,7 +42,7 @@ pip install .
 emalioss
 ```
 
-### 配置
+### config配置
 
 Alioss Img Tools 从`HOME`目录寻找配置文件`emalioss.ini`即
 - win: C:\Users\xxxx\emalioss.ini
