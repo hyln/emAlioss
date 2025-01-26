@@ -29,7 +29,11 @@ class OssUtils():
         elif os.path.exists(emalioss_config_path):
             config.read(emalioss_config_path)
         else:
-            raise FileNotFoundError("Config file not found")
+            import platform 
+            if platform.system() == 'Windows':
+                raise FileNotFoundError("Config file not found, please check C:\Users\xxxx\emalioss.ini is exist")
+            else:
+                raise FileNotFoundError("Config file not found, please check /home/xxxx/emalioss.ini is exist")
 
 
         # read config
