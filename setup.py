@@ -82,7 +82,9 @@ def whl_build():
             'emalioss=emalioss.main:main',  # 命令名=模块:函数
         ],
         },
-        packages=['emalioss'],  # 包含模块
+        packages=find_packages(),  # 自动发现子包
+
+        # packages=['emalioss'],  # 包含模块
         include_package_data=True,
     )
 
