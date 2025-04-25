@@ -24,8 +24,6 @@ python setup.py bdist_msi
 
 ### ubuntu 安装
 
-> 1. 在conda base环境中测试了
-
 安装依赖
 ```bash
 sudo apt-get install --reinstall libxcb-xinerama0 libxcb1 libx11-xcb1 libxcb-util1 libxcb-cursor0
